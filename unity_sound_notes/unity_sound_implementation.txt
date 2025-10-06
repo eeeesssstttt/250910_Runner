@@ -1,0 +1,188 @@
+Game pres : clair obscur
+
+Système son Unity (AudioSources et AudioClips)
+3D vs 2D sound (spatialisation)
+Reverb
+AudioMixer (effects sounds - music - general volume)
+Effets
+
+1_Fonctionnement
+
+- émetteur/source
+- récepteur/oreille
+
+Unity: source = AudioSource,
+oreille = AudioListener
+
+*using 250923_InfiltrationGame as base
+
+*in Unity, create new scene.
+It already contains an Audio Listener, on the Main Camera
+Has a direction, left and right are based on camera.
+Can be placed elsewhere, according to needs.
+
+only 1 AudioListener per scene.
+
+AudioSource plays sound, positioned in space or not.
+AudioSource uses AudioClips, which are the sound files.
+
+https://bfxr.net > 8-bit sound generator
+
+https://opengameart.org > *in sound effects, foot steps
+
+*in #Project folder, create Audio folder.
+*in it, create Sounds of SFX folder.
+*drag and drop subfolders from sound pack to Audio folder.
+
+If you click on sound file, preview in Inspector, can listen.
+If not visible, must drag double line up to display.
+
+*create AudioSource:
+either manually create Empty and Add AudioSource component, or 
+right-click on Hierarchy > Audio > Audio Source
+
+in AudioSource component:
+first, displays source file,
+can Mute with boolean, 
+Play On Awake bool is default checked, 
+Loop as well.
+Spatial Blend can be set to 3D or 2D
+
+*in Unity, check both PlayOnAwake and Loop
+
+*test SpatialBlend settings and move AudioSource closer to Camera
+
+Caution, in GameView, there is new mute button, which may be active by default.
+When Spatial Blend set to 1 (3D), the sound is no longer heard when far away
+Else, will always be somewhat audible.
+
+Doppler Effect: pitch changes slightly when object passes by.
+(Sound waves traverse the air between their source and a listener. A change in distance to the listener affects perceived sound's frequency)
+
+Can add Reverb/Echo effect: can create different Audio Reverb Zones
+
+*in Unity, can create it: 
+right-click in Hierarchy > Audio > Audio Reverb Zone
+The difference in Sound is clearer with a sharp sound.
+This AudioReverbZone affects the sound when the AudioListener is inside it. (not the source)
+
+There are many different ReverbPresets to choose from in Inspector. User preset lets you manually set sliders.
+
+In AudioSource, can toggle ByPassReverbZone so the sound is never reverberated.
+
+Also possible to calculate reverb in a more complex way. (Team Panoptes worked with Demute sound designers for SkyStranded)
+(can check out Tunes of the Kingdom video which explains how sound was managed in Zelda TOTK)
+
+In AudioSource, can set AudioResource to select random sound from list and create variations in volume and pitch, so that sounds are less repetitive.
+In Unity, to do this, can create a RandomAudioContainer.
+
+*in Sounds folder:
+right-click > Create > Audio > Audio Random Container
+
+*double-click on AudioRandomContainer to open menu. 
+deploy AudioClips, add a sound.
+
+At top of menu, can click play arrow to listen.
+To right of Volume setting, can allow randomization and adjust below.
+This makes repetitive sounds less boring.
+Can also randomize Pitch.
+
+Can drag multiple AudioClips, or Create Audio Random Container from selection.
+
+Can specify playback mode:
+Sequential plays sounds in order.
+Shuffle plays each sound at least once in random order.
+Random plays sounds totally randomly. Can set to avoid repeating last x sounds.
+
+Can adjust trigger to manual or automatic.
+Can adjust time offset and other parameters for manual trigger.
+
+Can also create script to manage this.
+
+*create MonoBehavior Script FootstepSounds in Scripts folder.
+
+*in this script, we're not using GetComponent() so that it'll work with different objects.
+We use an AudioSource to specify in Inspector, as well as play bool and delay + timers.
+**insure AudioRancomContainer is the AudioResource specified to AudioSource.
+
+Instead of individually managing sound for each effect, use AudioMixer
+
+*create new Mixer folder in Audio.
+right-click > Create > Audio > Audio Mixer
+call it Mixer.
+Right now, the AudioMixer is not connected to anything.
+
+More or less technically: 
+AudioClips are sent to AudioSource. These are sent to MixerGroup, which take Effects into account before sending them to AudioListener.
+
+By default, there is a single AudioMixer group : Master.
+
+In AudioSource, we can now set Audio Output. Must set either to none or to our Mixer's Master group.
+Can control MixTable while game is running.
+Arrow cursor is volume, can lower it, or increase it.
+
+https://incompetech.com > makes lots of free music, must credit.
++ graph paper generator. (.ogg is better than mp3 for longer sounds. for sound effects, .wav is better (is best quality but heavier files)
+
+*in Audio, create Music folder.
+
+to play music in scene:
+*Create Audio Source in Hierarchy. Turn on PlayOnAwake and Loop.
+
+To sep effects and music in Mixer, must create groups.
+*click on Master and + to create child groups SFX/Sounds and Music/BGM (BackGroundMusic)
+Now, modifying Master will affect both SFX and BGM, but these can also be managed separately.
+
+in Mixer, double gauge symbolizes left and right. In Inspector is horizontal, but same (left and right).
+
+Can create extra audio mixer and drag onto previous to have multiple subMixers leading to main one. When creating Mixer, give it specific subgroup.
+
+Can color code SFX, vs Music etc.
+Can configure different views, to hide and show certain elements.
+
+Can add effects when specific channels selected. For ex: Lowpass tamps down higher pitched sounds, playing only deeper sounds. (sounds like hum outside of a club.)
+Inversely, Highpass, sounds like what you hear out of someone's earbuds on the metro.
+
+Can bypass effects on mixer, when pressing small circle, or by right-clicking on effect in inspector and selecting Bypass.
+
+Too many Effects may not be a good thing.
+Usually, Normalizer, Equalizer, Compressor. (?)
+
+To record different mixer setups and shift between them, use snapshots.
+The one with a star is default.
+Can create progressive shift from one snapshot to next with a script.
+Only works if you use slider paramters (not mute or bypass)
+
+*create Empty "Party Zone" in Hierarchy. Give it Box Collider and enlarge it. Set it as Trigger.
+
+*create new monobehaviour script "AudioTriggerZone"
+give it a [SF] AudioBehaviorSnapshot, and we're using .TransitionTo(float time);
+transitions from current snapshot to the specified snapshot in [SF].
+
+*create sphere with rigidbody, uncheck gravity, check kinematic.
+(rigidbody is required to activate trigger)
+(both elements need colliders.)
+
+In inspector of Mixer channels, right-clicking on Volume lets you choose transition type for .TransitionTo().
+
+If you want to avoid using snapshots, to modify a single parameter at a time (filters, volume, etc)
+You can change Mixer one parameter at a time. 
+(see also, hollow knight hit sound effect: when you get hit, all sounds disappear for a half second)
+Can create script to change filter depending on distance from source. We'll want to change cutoff frequency from source.
+right-click on filter parameter and say "expose to script": will be variable accessible from code. They are shown in exposed paramters list.
+Must rename in the list. Careful, script needs you to copy it exactly.
+
+*create LowpassController script.
+
+length of a Vector3 is magnitude.
+distance cannot be negative. order of Vector3.Distance(a, b) does not matter.
+
+careful, if edit in play mode is on in mixer, takes over and your scripts don't work.
+
+can find online spectrogram programs to see what real maxrequencies are in a sound clip.
+
+to switch parameter with something other than Lerp, create AnimationCurve [SF]. Animation curve appears which you can configure.
+can double-click to create points, and right-click > edit to modify time and value. Here, value will be frequency
+
+ctrl + scroll manages single direction zoom
+or press f and it'll just set it properly
