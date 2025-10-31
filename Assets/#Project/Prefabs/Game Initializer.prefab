@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4452966497052750272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2875489572830843857}
+  - component: {fileID: 5951032084513763013}
+  m_Layer: 0
+  m_Name: Game Initializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2875489572830843857
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452966497052750272}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.55247, y: 0, z: 57.07817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5951032084513763013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452966497052750272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff356f8cf875a424494976df0215032f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2315380882705586199, guid: 7da1b1c79595a0647ad9e905d6342b41, type: 3}
+  actions: {fileID: -944628639613478452, guid: ac3896e91c55b244097cd072d966bea5, type: 3}
+  actionMapName: PlayerMovement
+  lateralMovementActionName: XAxis
+  jumpActionName: Jump
+  speed: 5
+  jumpMagnitude: 50
+  cam: {fileID: 4425933501960126410, guid: c2ddd70ce7eacd044b7887ee27fd0911, type: 3}
+  cameraDistance: -3
+  gameManager: {fileID: 2564612205954156487, guid: f40e5a6334106574c8cceb8bd03d15c4, type: 3}
+  terrain: {fileID: 356459874718245879, guid: 263cf109779cc5946b0203de987b4ca3, type: 3}
+  obstacles: {fileID: 7469427472552100196, guid: abac138f9436234488c91eb5306dd8e7, type: 3}
