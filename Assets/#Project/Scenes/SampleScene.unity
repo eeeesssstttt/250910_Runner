@@ -276,6 +276,10 @@ PrefabInstance:
       propertyPath: jumpMagnitude
       value: 300
       objectReference: {fileID: 0}
+    - target: {fileID: 5951032084513763013, guid: 59c74aa4647dce94493d280b80d3ed86, type: 3}
+      propertyPath: cameraDistance
+      value: -10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
